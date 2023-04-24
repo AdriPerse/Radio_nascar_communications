@@ -1,4 +1,6 @@
 absl-py==1.4.0
+aiohttp==3.8.4
+aiosignal==1.3.1
 altair==4.2.2
 anyascii==0.3.2
 astunparse==1.6.3
@@ -8,7 +10,7 @@ certifi==2022.12.7
 commonmark==0.9.1
 contractions==0.1.73
 decorator==5.1.1
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl#sha256=0964370218b7e1672a30ac50d72cdc6b16f7c867496f1d60925691188f4d2510
+en-core-web-sm==3.5.0
 entrypoints==0.4
 flatbuffers==23.3.3
 gast==0.4.0
@@ -19,6 +21,7 @@ google-auth-oauthlib==1.0.0
 google-pasta==0.2.0
 grpcio==1.54.0
 h5py==3.8.0
+huggingface_hub==0.13.4
 jax==0.4.8
 joblib==1.2.0
 jsonschema==4.17.3
@@ -34,6 +37,7 @@ oauthlib==3.2.2
 opt-einsum==3.3.0
 pandas==1.5.3
 Pillow==9.5.0
+pip==23.1.1
 plotly==5.14.1
 protobuf==3.20.3
 pyahocorasick==2.0.0
@@ -46,6 +50,7 @@ pyrsistent==0.19.3
 pytz-deprecation-shim==0.1.0.post0
 requests-oauthlib==1.3.1
 rsa==4.9
+scikit-learn==1.2.2
 scipy==1.10.1
 smmap==5.0.0
 spacy==3.5.2

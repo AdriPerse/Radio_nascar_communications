@@ -1,6 +1,5 @@
 from PIL import Image
 import streamlit as st
-import streamlit.components.v1 as components
 import joblib
 import nltk
 nltk.download('punkt')
@@ -10,10 +9,9 @@ import re
 import plotly.graph_objs as go
 import tqdm
 from sklearn.preprocessing import LabelEncoder
-from transformers import DistilBertTokenizer, DistilBertConfig
+from transformers import DistilBertTokenizer
 import spacy
 import numpy as np
-import tensorflow as tf
 import tensorflow.lite as lite
 import os
 import base64
