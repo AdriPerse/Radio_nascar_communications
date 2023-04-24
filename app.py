@@ -16,6 +16,8 @@ import tensorflow.lite as lite
 import os
 import base64
 
+st.set_option('browser.gatherUsageStats', False)
+
 nlp = spacy.load('en_core_web_sm')
 
 stopwords = set(nltk.corpus.stopwords.words('english'))
