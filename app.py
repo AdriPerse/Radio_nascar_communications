@@ -7,7 +7,6 @@ nltk.download('punkt')
 nltk.download('stopwords')
 import contractions
 import re
-import json
 import plotly.graph_objs as go
 import tqdm
 from sklearn.preprocessing import LabelEncoder
