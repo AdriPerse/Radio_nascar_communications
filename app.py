@@ -324,7 +324,7 @@ with tab2:
         st.title("Intents analysis and categorization in radio communication.")
         st.markdown("**[Rolos](https://www.rolos.com/)** is a leading intelligent platform that simplifies and accelerates the research life cycle through AI-based computational modeling. With a high-performance infrastructure and supported by more than 40 secure partner data centers worldwide, Rolos significantly improves the quality of scientific experiments and increases the productivity of scientific and industrial research teams.")
         st.markdown("**[NASCAR](https://www.nascar.com/)**, the company's client, has 45 radio channels to facilitate communication between drivers and engineers. However, manually monitoring all these channels is a time and resource-intensive task. Therefore, there is a need for an automated real-time radio analytics service that can provide valuable insights.")
-        st.markdown("The team analyzed text messages, categorized their intents (for e.g., messages talking about fuel and tires or about confirmation, etc.) and created prediction models to classify their intents.")
+        st.markdown("The Team analyzed text messages, categorized their intents (for e.g., messages talking about fuel and tires or about confirmation, etc.) and created prediction models to classify their intents.")
         st.markdown("The prediction model learns on the given 29 categories, messages and predicts for unseen message content. By classifying radio text messages into these categories, engineers can more easily identify the type of message being sent and respond accordingly, helping to keep the driver safe and the car in optimal condition throughout the race.")
         st.markdown("We use NLP, machine learning and deep learning models to predict the unseen data content. The best model can correctly categorize 87% of the messages into 29 categories.")   
         st.image("data/images/model_performance.png")
@@ -384,7 +384,7 @@ with tab4:
             st.write("Please select one model.")
 
         # Input section
-        input_text = st.text_area("Enter a sentence (Max 85 words):",
+        input_text = st.text_area("Write a sentence as you where from the NASCAR team talking at the radio!!  (Max 85 words):",
                                   height=100
                                   )
 
@@ -410,7 +410,7 @@ with tab4:
 with tab5:
     with st.container():
         # About us section
-        st.write("Project owners:")
+        st.title("Project owners")
 
         # Owner 1
         with st.container():
