@@ -12,9 +12,12 @@ from sklearn.preprocessing import LabelEncoder
 from transformers import DistilBertTokenizer
 import spacy
 import numpy as np
+import pandas as pd
 import tensorflow.lite as lite
 import os
 import base64
+import plotly.graph_objects as go
+import colorlover as cl
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -131,37 +134,22 @@ def create_distilbert_input_features(docs, max_seq_length):
 def predict_label_model2(text):
     # Normalize and tokenize the input sentence
     norm_sentence = normalize_document2(text)
-    # tokens = tokenizer.tokenize(norm_sentence)
     
     # Convert tokens to input features
     input_ids, input_masks = create_distilbert_input_features([norm_sentence], max_seq_length=MAX_SEQ_LENGTH)
     input_ids = np.array(input_ids, dtype=np.int32)
     input_masks = np.array(input_masks, dtype=np.int32)
-    
     # Set the input data
     interpreter.set_tensor(input_details[0]['index'], input_ids)
     interpreter.set_tensor(input_details[1]['index'], input_masks)
-
     # Invoke the interpreter
     interpreter.invoke()
-
     # Get the model prediction
     prediction = interpreter.get_tensor(output_details[0]['index'])
-
-    # Get the predicted class label
-    predicted_label = np.argmax(prediction, axis=1)
-    
-    # Decode the predicted label back to the string label
-    decoded_predicted_label = label_encoder.inverse_transform(predicted_label)
-
-    # Get the top 3 most probable labels and their probabilities
     top_3_labels = np.argsort(prediction[0])[-3:][::-1]
     label_probs = prediction[0][top_3_labels] * 100
 
-    #st.write("Top 3 predicted labels and their corresponding probabilities:")
     decoded_top_3_labels = label_encoder.inverse_transform(top_3_labels)
-    #for i in range(len(decoded_top_3_labels)):
-    #    st.write(f"{i+1}. {decoded_top_3_labels[i]}: {label_probs[i]:.2f}%")
     
     return decoded_top_3_labels, label_probs, norm_sentence
 
@@ -215,6 +203,91 @@ def get_img_with_href(local_img_path, target_url):
         </a>'''
     return html_code
 
+def plot_diagram():
+    # Read the csv file
+        filtered_connections = pd.read_csv("data/filtered_connections.csv")
+
+        labels_origin = [
+            "break",
+            "radiator",
+            "colorflag",
+            "fuel",
+            "tires",
+            "nontechnicaltalk",
+            "pressure_tires",
+            "throttle",
+            "position"
+        ]
+        labels_target = [
+            "Pit Stops",
+            "Car handling",
+            "Race Flags",
+            "Pit Stop Planning",
+            "Tire Maintenance",
+            "Car parts: Bumpers, doors, quarter panels",
+            "Fuel-saving strategies",
+            "Managing Tires on the Track",
+            "Positioning and strategy"
+        ]
+
+        labels = labels_origin + labels_target
+
+        # Adjust the colors to more pastel shades by changing the alpha value to 0.7
+        colors_origin = [color.replace("rgb", "rgba").replace(")", ",0.7)") for color in cl.scales[str(len(labels_origin))]["qual"]["Pastel1"]]
+        colors_target = [color.replace("rgb", "rgba").replace(")", ",0.7)") for color in cl.scales[str(len(labels_target))]["qual"]["Set3"]]
+        palette = colors_origin + colors_target
+
+        # Assign colors to the labels
+        targetlabel = filtered_connections["subject"].apply(lambda x: labels_target.index(x) + len(labels_origin))
+        colors = targetlabel.apply(lambda x: palette[x])
+
+        # Create the Sankey diagram
+        fig = go.Figure(data=[go.Sankey(
+            node = dict(
+                pad = 15,
+                thickness = 20,
+                line = dict(color = 'rgba(0,0,0,1)', width = 1),
+                label = labels,
+                color = colors
+            ),
+            link = dict(
+                source = filtered_connections["label_tk"].apply(lambda x: labels_origin.index(x)),
+                target = targetlabel,
+                value = [1]*len(filtered_connections["label_tk"]),
+                color = colors
+            )
+        )])
+
+        fig.update_layout(title_text="Illustration of Associations Between Observed and Identified Labels", font_size=20)
+        fig.update_layout(autosize=True, width=700, height=600,
+            margin=dict(l=50, r=50, b=100, t=100, pad=4), paper_bgcolor='rgba(255, 255, 255, .9)')
+
+        # Increase label font size
+        fig.update_traces(textfont=dict(size=20, family='Arial Black'))
+
+        # Add annotations for human- and machine-classified topics
+        fig.add_annotation(
+            text="Human-classified topics",
+            xref="paper",
+            yref="paper",
+            x=0.01,
+            y=1.078,
+            showarrow=False,
+            font=dict(size=19, family="Arial Black", color="black")
+        )
+
+        fig.add_annotation(
+            text="Machine-classified topics",
+            xref="paper",
+            yref="paper",
+            x=0.99,
+            y=1.078,
+            showarrow=False,
+            font=dict(size=19, family="Arial Black", color="black"),
+            xanchor="right"
+        )
+        st.plotly_chart(fig)
+
 
 ####################################### LAYOUT ####################################################
 st.set_page_config(
@@ -240,12 +313,32 @@ with tab1:
 with tab2:
     with st.container():
         # Database screenshot
-        database_screenshot = Image.open("data/images/database_screenshot.png")
-        st.image(database_screenshot, use_column_width=True)
+        st.write("our process here.")
+        plot_diagram()
+
+        
 
 with tab3:
     with st.container():
-        st.write("hey")
+        st.write("We have found the labels through unsupervised learning and clustering using different methods and models, such as Guided Bertopic, GPT-3, CTM, and LDA on a dataset of 24k+ rows.")
+        # Selector for images
+        image_options = ["Select a topic", "Fuel and Pit Stop Management", "Positioning", "Race Flags", "Tire Management"]
+        selected_topic = st.selectbox("Choose a topic to display keywords:", image_options)
+
+        if selected_topic == "Fuel and Pit Stop Management":
+            image_file = "data/images/Fuel_and_Pit_Stop_Management_b&w.png"
+        elif selected_topic == "Positioning":
+            image_file = "data/images/Positioning_bw.png"
+        elif selected_topic == "Race Flags":
+            image_file = "data/images/Race_Flags_bw.png"
+        elif selected_topic == "Tire Management":
+            image_file = "data/images/Tire_Management_bw.png"
+        else:
+            image_file = None
+
+        if image_file is not None:
+            topic_image = Image.open(image_file)
+            st.image(topic_image, use_column_width=True)
 
 
 with tab4:
@@ -270,7 +363,7 @@ with tab4:
         # Description of the selected model
         if selected_model == "Classical Machine Learning for NLP":
             st.write("This is a simple model that helps in classifying data into different categories, in this case, it is designed to handle multiple categories. It uses a mathematical approach called logistic regression and adjusts its predictions based on past data. This model is designed to handle text data and processes it to make it ready for analysis. The text is transformed into numerical values, and the model uses these values to make predictions. This model is not too complex and is easy on computing resources. For more information, please refer to the scikit-learn documentation for [LogisticRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html).")
-        elif selected_model == "Transformer Machine Learning for NLP":
+        elif selected_model == "Transformer Deep Learning for NLP":
             st.write("DistilBERT is a smaller, faster version of the popular BERT model. It has been trained by the company Hugging Face to perform text classification tasks, such as sentiment analysis and named entity recognition. The model uses an advanced technique called 'distillation' to reduce its size and computational requirements, while still maintaining its accuracy. This makes it a good choice for businesses and organizations that need to classify text data but have limited resources. For more information, please refer to the Hugging-Face documentation for [DistilBERT](https://huggingface.co/docs/transformers/model_doc/distilbert#distilbert).")
         else:
             st.write("Please select one model.")
@@ -289,7 +382,7 @@ with tab4:
                 if input_text and selected_model != "Select a model":
                     if selected_model == "Classical Machine Learning for NLP":
                         top3_labels, top3_probs, normalized_text  = predict_label_model1(input_text)
-                    elif selected_model == "Transformer Machine Learning for NLP":
+                    elif selected_model == "Transformer Deep Learning for NLP":
                         top3_labels, top3_probs, normalized_text  = predict_label_model2(input_text)
                     else:
                         top3_labels, top3_probs = None, None
