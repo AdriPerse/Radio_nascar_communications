@@ -297,7 +297,7 @@ def plot_diagram():
         st.plotly_chart(fig)
 
 
-####################################### LAYOUT ####################################################
+########################################################## LAYOUT ######################################################################
 st.set_page_config(
     page_title="NASCAR com classificator",
     page_icon="🏁",
@@ -305,7 +305,7 @@ st.set_page_config(
 
 st.title("NASCAR Radio communication label classification")
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(['Intro', 'The Process', 'Labels info', 'Try yourself', 'About us'])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(['Intro', 'The P.O.C.', 'Labels info', 'Try yourself', 'About us'])
 
 with tab1:
     with st.container():
@@ -321,14 +321,20 @@ with tab1:
 with tab2:
     with st.container():
         # Database screenshot
-        st.write("our process here.")
-        
-
-        
+        st.title("Intents analysis and categorization in radio communication.")
+        st.markdown("**:red[Rolos]** is a leading intelligent platform that simplifies and accelerates the research life cycle through AI-based computational modeling. With a high-performance infrastructure and supported by more than 40 secure partner data centers worldwide, Rolos significantly improves the quality of scientific experiments and increases the productivity of scientific and industrial research teams.")
+        st.markdown("**:blue[NASCAR]**, the company's client, has 45 radio channels to facilitate communication between drivers and engineers. However, manually monitoring all these channels is a time and resource-intensive task. Therefore, there is a need for an automated real-time radio analytics service that can provide valuable insights.")
+        st.markdown("The team analyzed text messages, categorized their intents (for e.g., messages talking about fuel and tires or about confirmation, etc.) and created prediction models to classify their intents.")
+        st.markdown("The prediction model learns on the given 29 categories, messages and predicts for unseen message content. By classifying radio text messages into these categories, engineers can more easily identify the type of message being sent and respond accordingly, helping to keep the driver safe and the car in optimal condition throughout the race.")
+        st.markdown("We use NLP, machine learning and deep learning models to predict the unseen data content. The best model can correctly categorize 87% of the messages into 29 categories.")   
+        st.image("data/images/model_performance.png")
+        st.markdown("With the good performance of our models, the NASCAR teams can optimize their strategies and make adjustments in real time, which can lead to better results and help reduce the risk of accidents or other safety issues.")
+        st.image("data/images/win.jpg")
 
 with tab3:
     with st.container():
         st.write("We have found the labels through unsupervised learning and clustering using different methods and models, such as Guided Bertopic, GPT-3, CTM, and LDA on a dataset of 24k+ rows.")
+        st.write("The new found labels was then compared with the labels provided by Rolos, here you can see an example of some of the labels and the connexions between them:")
         plot_diagram()
         # Selector for images
         image_options = ["Select a topic", "Fuel and Pit Stop Management", "Positioning", "Race Flags", "Tire Management"]
