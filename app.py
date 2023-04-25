@@ -89,10 +89,6 @@ def predict_label_model1(text):
     top3_indices = prob_scores.argsort()[::-1][:3]
     top3_labels = lr.classes_[top3_indices]
     top3_probs = prob_scores[top3_indices] * 100
-
-    #st.write("Top 3 predicted labels and their corresponding probabilities:")
-    #for i in range(3):
-    #    st.write(f"{i+1}. {top3_labels[i]}: {top3_probs[i]:.2f}%")
     
     return top3_labels, top3_probs, normalized_text
 
@@ -387,7 +383,7 @@ with tab4:
                     else:
                         top3_labels, top3_probs = None, None
                     if top3_labels is not None and top3_probs is not None:
-                        plot_probabilities(top3_labels, top3_probs, f"{selected_model} Probabilities")
+                        plot_probabilities(top3_labels, top3_probs, f"{selected_model} Confidence")
                         st.write("`Input text:`", input_text)
                         st.write("`Normalized text:`", normalized_text)
 
