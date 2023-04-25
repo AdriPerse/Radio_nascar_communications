@@ -154,8 +154,11 @@ def plot_probabilities(labels, probabilities, title):
     # Reverse the order of labels and probabilities
     reversed_labels = labels[::-1]
     reversed_probabilities = probabilities[::-1]
-    # Round the probabilities to two decimal places and make them bold
-    text = [f"<b>{round(prob, 2)}%</b>" for prob in reversed_probabilities]
+    # Round the probabilities to integers and make them bold
+    text = [f"<b>{int(round(prob, 2))}%</b>" for prob in reversed_probabilities]
+
+    # Define colors
+    colors = ['#FFA500', '#FFD700', '#32CD32']  # orange, yellow, green
 
     trace = go.Bar(
         y=reversed_labels,
@@ -164,18 +167,27 @@ def plot_probabilities(labels, probabilities, title):
         text=text,
         textposition='outside',
         insidetextfont=dict(size=14, color="white"),
-        marker=dict(line=dict(color='rgba(0,0,0,1)', width=2))
+        marker=dict(color=colors, line=dict(color='rgba(0,0,0,1)', width=2))
     )
 
     # Add annotations for bold labels
     annotations = []
     for i, label in enumerate(reversed_labels):
-        annotations.append(dict(xref='paper', yref='y', y=label, x=-0.2, text=f"<b>{label}</b>", showarrow=False, font=dict(size=14)))
+        annotations.append(dict(
+            xref='paper',
+            yref='y',
+            y=label,
+            x=-0.01,
+            text=f"<b>{label}</b>",
+            showarrow=False,
+            font=dict(size=14),
+            xanchor="right"
+            ))
 
     layout = go.Layout(
         title=title,
-        xaxis=dict(title='Probability (%)', range=[0, max(reversed_probabilities) * 1.1]),
-        yaxis=dict(title='Labels', showticklabels=False),
+        xaxis=dict(title='Confidence (%)', range=[0, max(reversed_probabilities) * 1.1]),
+        yaxis=dict(title='Topic Labels', showticklabels=False),
         annotations=annotations,
         margin=dict(l=150, r=150)
     )
@@ -293,7 +305,7 @@ st.set_page_config(
 
 st.title("NASCAR Radio communication label classification")
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(['Intro', 'The process', 'Labels info', 'Try yourself', 'About us'])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(['Intro', 'The Process', 'Labels info', 'Try yourself', 'About us'])
 
 with tab1:
     with st.container():
@@ -340,7 +352,7 @@ with tab3:
 with tab4:
     with st.container():
         # Model selector
-        model_options = ["Select a model", "Classical Machine Learning for NLP", "Transformer Machine Learning for NLP"]
+        model_options = ["Select a model", "Classical Machine Learning for NLP", "Transformer Deep Learning for NLP"]
         header_image = Image.open("data/images/comics.png")
         st.image(header_image, use_column_width=True)
         st.write("This is a web app that uses two different machine learning models to classify short texts/sentences of __max 85 words__ into different categories. The first model is a classical machine learning model based on *logistic regression*, and the second model is a transformer-based model based on the *DistilBERT architecture*.")
