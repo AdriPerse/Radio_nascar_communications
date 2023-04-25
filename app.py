@@ -322,13 +322,14 @@ with tab2:
     with st.container():
         # Database screenshot
         st.write("our process here.")
-        plot_diagram()
+        
 
         
 
 with tab3:
     with st.container():
         st.write("We have found the labels through unsupervised learning and clustering using different methods and models, such as Guided Bertopic, GPT-3, CTM, and LDA on a dataset of 24k+ rows.")
+        plot_diagram()
         # Selector for images
         image_options = ["Select a topic", "Fuel and Pit Stop Management", "Positioning", "Race Flags", "Tire Management"]
         selected_topic = st.selectbox("Choose a topic to display keywords:", image_options)
