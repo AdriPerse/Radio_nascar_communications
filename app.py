@@ -385,7 +385,7 @@ with tab4:
 
         # Input section
         input_text = st.text_area("Write a sentence as you where from the NASCAR team talking at the radio!!  (Max 85 words):",
-                                  height=100,
+                                  height=50,
                                   )
 
         # Output section
