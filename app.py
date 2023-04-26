@@ -385,26 +385,27 @@ with tab4:
 
         # Input section
         input_text = st.text_area("Write a sentence as you where from the NASCAR team talking at the radio!!  (Max 85 words):",
-                                  height=100
+                                  height=100,
                                   )
 
         # Output section
-        if input_text:
-            words = input_text.split()
-            if len(words) > 85:
-                st.error("The number of words cannot be greater than 85.")
-            else:
-                if input_text and selected_model != "Select a model":
-                    if selected_model == "Classical Machine Learning for NLP":
-                        top3_labels, top3_probs, normalized_text  = predict_label_model1(input_text)
-                    elif selected_model == "Transformer Deep Learning for NLP":
-                        top3_labels, top3_probs, normalized_text  = predict_label_model2(input_text)
-                    else:
-                        top3_labels, top3_probs = None, None
-                    if top3_labels is not None and top3_probs is not None:
-                        plot_probabilities(top3_labels, top3_probs, f"{selected_model} Confidence")
-                        st.write("`Input text:`", input_text)
-                        st.write("`Normalized text:`", normalized_text)
+        if st.button("Enter"):
+            if input_text:
+                words = input_text.split()
+                if len(words) > 85:
+                    st.error("The number of words cannot be greater than 85.")
+                else:
+                    if input_text and selected_model != "Select a model":
+                        if selected_model == "Classical Machine Learning for NLP":
+                            top3_labels, top3_probs, normalized_text  = predict_label_model1(input_text)
+                        elif selected_model == "Transformer Deep Learning for NLP":
+                            top3_labels, top3_probs, normalized_text  = predict_label_model2(input_text)
+                        else:
+                            top3_labels, top3_probs = None, None
+                        if top3_labels is not None and top3_probs is not None:
+                            plot_probabilities(top3_labels, top3_probs, f"{selected_model} Confidence")
+                            st.write("`Input text:`", input_text)
+                            st.write("`Normalized text:`", normalized_text)
 
 
 with tab5:
