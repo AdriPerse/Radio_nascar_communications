@@ -315,8 +315,15 @@ with tab1:
     with st.container():
         # App title
         st.write("Welcome to our label classification app!")
-        st.write("This app uses a prediction model to classify short text/sentences into labels.")
-        st.write("Simply enter a sentence and the app will output the corresponding label.")
+        st.write("This app uses prediction models to classify short text/sentences into labels.")
+        st.write("Simply enter a sentence and the app will output the corresponding label in the tab 'Try yourself'.")
+        with open("new_Rolos_project.pdf", "rb") as pdf_file:
+            PDFbyte = pdf_file.read()
+
+        st.download_button(label="Download presentation PDF", 
+                data=PDFbyte,
+                file_name="NASCAR_Rolos.pdf",
+                mime='application/octet-stream')
 
 with tab2:
     with st.container():
