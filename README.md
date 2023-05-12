@@ -1,3 +1,3 @@
 # radionascar
 
-<img src="data/images/CodeGenX_demo.gif" width="800"/>
+<img src="data/images/streamlit-demo.gif" width="800"/>
